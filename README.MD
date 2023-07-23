@@ -2,13 +2,13 @@
 
 ## Установка и запуск
 
-1. Клонируйте репозиторий на свой локальный компьютер:
+1. Клонируйте репозиторий на свой локальный компьютер
 
 ```sh
 git clone https://github.com/Arlink1703/budjet/
 ```
 
-2. Перейдите в каталог проекта:
+2. Перейдите в каталог проекта
 
 ```sh
 cd budjet/
@@ -33,7 +33,7 @@ Windows
 venv\Scripts\activate
 ```
 
-macOS и Linux:
+macOS и Linux
 
 ```sh
 source venv/bin/activate
@@ -47,6 +47,13 @@ pip install -r requirements.txt
 
 4. Запустить скрипт!
 
+Windows
+
+```sh
+python budjet.py
+```
+
+macOS и Linux:
 ```sh
 python3 budjet.py
 ```
