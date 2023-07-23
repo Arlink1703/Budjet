@@ -45,7 +45,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Запустить скрипт!
+4. Поменять параметры *url* и *id* в файле *budjet.py*
+
+5. Запустить скрипт!
 
 Windows
 
