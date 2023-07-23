@@ -1,4 +1,3 @@
-
 import re
 
 import requests
@@ -56,31 +55,39 @@ class AplicantsListFormatter:
         return
 
     def get_dark_horses_applicants(self):
-        counter = 0
+        horses_counter = 0
+        grey_horses_counter = 0
         dark_horses_applicants = []
         for applicant in self.applicants:
-            if applicant.position <= self.hero.position:
+            if applicant.position <= self.hero.position and applicant.exam_points > 0:
                 continue
 
-            if applicant.extra_points > 0:
-                counter += 1
-                dark_horses_applicants.append(applicant)
-
-            if (
-                applicant.average_mark >= self.hero.average_mark
-                and applicant.test_type == "ПИГА"
-                and applicant.points == 0
+            if applicant.extra_points > 0 and (
+                applicant.all_points == applicant.extra_points
             ):
-                counter += 1
                 dark_horses_applicants.append(applicant)
+                grey_horses_counter += 1 if applicant.rank == RankType.GREY else 0
+                horses_counter += 1
 
-            if not applicant.id.isdigit():
-                counter += 1
+            elif (
+                applicant.average_mark >= self.hero.average_mark
+                and applicant.exam_points == 0
+            ):
                 dark_horses_applicants.append(applicant)
+                grey_horses_counter += 1 if applicant.rank == RankType.GREY else 0
+                horses_counter += 1
 
-        print(f"Людей ниже вас в списке, имеющих шансы вас обойти, всего: {counter}")
-        for applicant in dark_horses_applicants:
-            print(applicant)
+            elif not applicant.id.isdigit():
+                dark_horses_applicants.append(applicant)
+                grey_horses_counter += 1 if applicant.rank == RankType.GREY else 0
+                horses_counter += 1
+
+        print(
+            f"Людей ниже вас в списке, имеющих шансы вас обойти, всего: {horses_counter}\n"
+            f"Из них {grey_horses_counter} попадают на другое направление"
+        )
+        # for applicant in dark_horses_applicants:
+        #     print(applicant)
         return
 
     @staticmethod
@@ -114,8 +121,8 @@ class AplicantsListFormatter:
 
             extra_points = int(re.search(r"ИД:\s(\d*)Балл", card_text).group(1))
 
-            points = re.search(r"Балл ВИ:\s(\d*)", card_text).group(1)
-            points = int(points) if points else "-"
+            exam_points = re.search(r"Балл ВИ:\s(\d*)", card_text).group(1)
+            exam_points = int(exam_points) if exam_points else 0
 
             all_points = int(re.search(r"ВИ\+ИД:\s(\d*)", card_text).group(1))
 
@@ -131,7 +138,7 @@ class AplicantsListFormatter:
                 test_type=test_type,
                 average_mark=average_mark,
                 extra_points=extra_points,
-                points=points,
+                exam_points=exam_points,
                 all_points=all_points,
                 documents_status=documents_status,
                 rank=rank,
