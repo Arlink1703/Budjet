@@ -49,7 +49,6 @@ pip install -r requirements.txt
 
 5. Запустить скрипт!
 
-
 Windows
 
 ```sh
