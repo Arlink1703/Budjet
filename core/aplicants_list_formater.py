@@ -30,7 +30,7 @@ class AplicantsListFormatter:
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, "html.parser")
             applicant_cards = soup.find_all(
-                "div", class_="RatingPage_table__item__F0dcO"
+                "div", class_="RatingPage_table__item__qMY0F"
             )
             self.applicants = AplicantsListFormatter._parse_applicants(applicant_cards)
             return self.applicants
