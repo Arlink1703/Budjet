@@ -61,7 +61,9 @@ class AplicantsListFormatter:
         foreigns_grey_counter = 0
         dark_horses_applicants = []
         for applicant in self.applicants:
-            if applicant.position <= self.hero.position and applicant.exam_points > 0:
+            if (applicant.position <= self.hero.position or
+                applicant.exam_points > 0 or 
+                applicant.test_type.startswith("Конкурс")):
                 continue
 
             if applicant.extra_points > 0 and (
@@ -79,15 +81,15 @@ class AplicantsListFormatter:
                 grey_horses_counter += 1 if applicant.rank == RankType.GREY else 0
                 horses_counter += 1
 
-            elif not applicant.id.isdigit():
-                dark_horses_applicants.append(applicant)
-                foreigns_grey_counter += 1 if applicant.rank == RankType.GREY else 0
-                foreigns_counter +=1
+        #   elif not applicant.id.isdigit():
+        #       dark_horses_applicants.append(applicant)
+        #       foreigns_grey_counter += 1 if applicant.rank == RankType.GREY else 0
+        #       foreigns_counter +=1
 
         print(
             f"Людей ниже вас в списке, имеющих шансы вас обойти, всего: {horses_counter}\n"
             f"Из них {grey_horses_counter} попадают на другое направление\n"
-            f"Иностранцев {foreigns_counter} из которых {foreigns_grey_counter} попадают на другое направление"
+        #   f"Иностранцев {foreigns_counter} из которых {foreigns_grey_counter} попадают на другое направление"
         )
         # for applicant in dark_horses_applicants:
         #     print(applicant)
