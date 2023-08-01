@@ -32,7 +32,7 @@ class AplicantsListFormatter:
             applicant_cards = soup.find_all(
                 "div", class_="RatingPage_table__item__qMY0F"
             )
-            self.applicants = AplicantsListFormatter._parse_applicants(applicant_cards)
+            self.applicants, self.last_one = AplicantsListFormatter._parse_applicants(applicant_cards)
             return self.applicants
         else:
             return []
@@ -48,7 +48,8 @@ class AplicantsListFormatter:
                 grey_status_applicants.append(applicant)
 
         print(
-            f"Людей выше вас в списке, попдающих на другие направления, всего: {counter}"
+            f"Людей выше вас в списке, попдающих на другие направления, всего: {counter}\n"
+            f"Ваше место с учетом перешедших на другое направление: {self.hero.position - counter}"
         )
         # for applicant in grey_status_applicants:
         #     print(applicant)
@@ -88,7 +89,7 @@ class AplicantsListFormatter:
 
         print(
             f"Людей ниже вас в списке, имеющих шансы вас обойти, всего: {horses_counter}\n"
-            f"Из них {grey_horses_counter} попадают на другое направление\n"
+            f"Из них {grey_horses_counter} попадают на другое направление"
         #   f"Иностранцев {foreigns_counter} из которых {foreigns_grey_counter} попадают на другое направление"
         )
         # for applicant in dark_horses_applicants:
@@ -98,6 +99,8 @@ class AplicantsListFormatter:
     @staticmethod
     def _parse_applicants(applicant_cards) -> list[Applicant]:
         applicants_list = []
+        last_one_founded = False
+        last_one = None
         for card in applicant_cards:
             card_str = str(card)
             card_text = card.get_text()
@@ -110,6 +113,9 @@ class AplicantsListFormatter:
                 rank = RankType.GREY
             else:
                 rank = RankType.UNRANKED
+                if not last_one_founded:
+                    last_one = int(re.search(r"\d+", card_text).group(0)) - 1
+                    last_one_founded = True
 
             position = int(re.search(r"\d+", card_text).group(0))
 
@@ -151,4 +157,4 @@ class AplicantsListFormatter:
 
             applicants_list.append(applicant)
 
-        return applicants_list
+        return applicants_list, last_one
