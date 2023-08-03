@@ -58,8 +58,8 @@ class AplicantsListFormatter:
     def get_dark_horses_applicants(self):
         horses_counter = 0
         grey_horses_counter = 0
-        foreigns_counter = 0
-        foreigns_grey_counter = 0
+        # foreigns_counter = 0
+        # foreigns_grey_counter = 0
         dark_horses_applicants = []
         for applicant in self.applicants:
             if (applicant.position <= self.hero.position or
@@ -107,11 +107,15 @@ class AplicantsListFormatter:
 
             if re.search(r"green", card_str):
                 rank = RankType.GREEN
+                last_one_founded = False
             elif re.search(r"yellow", card_str):
                 rank = RankType.YELLOW
+                last_one_founded = False
             elif re.search(r"gray", card_str):
                 rank = RankType.GREY
+                last_one_founded = False
             else:
+                print((re.search(r"\d+", card_text).group(0)))
                 rank = RankType.UNRANKED
                 if not last_one_founded:
                     last_one = int(re.search(r"\d+", card_text).group(0)) - 1
